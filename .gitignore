@@ -1,0 +1,17 @@
+# Unit test
+.pytest_cache/
+
+# Virtual Environments
+.venv/
+
+# SQLite database file (local data)
+data/habits.db
+
+# IDEs and editors
+.vscode/
+
+# OS-specific files
+.DS_Store
+
+# Environment variables
+.env
