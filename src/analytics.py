@@ -1,10 +1,8 @@
 import datetime
 from typing import List, Dict
 
-
 def filter_by_periodicity(habits: List, periodicity: str) -> List:
     return [h for h in habits if h.periodicity == periodicity]
-
 
 def calculate_streak(completions: List[datetime.datetime], periodicity: str) -> int:
     if not completions:
@@ -20,10 +18,20 @@ def calculate_streak(completions: List[datetime.datetime], periodicity: str) -> 
             break
     return streak
 
-
 def longest_streak_all(habits: List) -> Dict[int, int]:
     return {h.id: calculate_streak(h.completions, h.periodicity) for h in habits}
 
-
 def longest_streak_for(habit) -> int:
     return calculate_streak(habit.completions, habit.periodicity)
+
+def longest_streaks_by_periodicity(habits: List) -> Dict[str, int]:
+    """
+    Compute the maximum streak achieved for each periodicity category.
+    """
+    result: Dict[str, int] = {}
+    for h in habits:
+        streak = calculate_streak(h.completions, h.periodicity)
+        current = result.get(h.periodicity, 0)
+        if streak > current:
+            result[h.periodicity] = streak
+    return result

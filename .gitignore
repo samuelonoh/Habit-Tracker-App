@@ -4,9 +4,6 @@
 # Virtual Environments
 .venv/
 
-# SQLite database file (local data)
-data/habits.db
-
 # IDEs and editors
 .vscode/
 

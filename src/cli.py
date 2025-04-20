@@ -37,15 +37,25 @@ def _list(ctx, periodicity):
 @click.pass_context
 def complete(ctx, habit_id):
     ctx.obj['tracker'].complete_habit(habit_id)
-    click.echo(f"Completed {habit_id} at {datetime.datetime.now(datetime.timezone.utc).isoformat()}")
+    click.echo(f"Completed {habit_id} at {datetime.datetime.utcnow().isoformat()}")
 
 @cli.command()
 @click.argument('habit_id', required=False, type=int)
+@click.option('--by-periodicity', is_flag=True, help='Show longest streaks by periodicity')
 @click.pass_context
-def analytics(ctx, habit_id):
-    from .analytics import longest_streak_all, longest_streak_for
+def analytics(ctx, habit_id, by_periodicity):
+    from .analytics import (
+        longest_streak_all,
+        longest_streak_for,
+        longest_streaks_by_periodicity
+    )
     tracker = ctx.obj['tracker']
-    if habit_id:
+
+    if by_periodicity:
+        streaks = longest_streaks_by_periodicity(tracker.list_habits())
+        for period, st in streaks.items():
+            click.echo(f"{period}: {st}")
+    elif habit_id:
         click.echo(f"Streak for {habit_id}: {longest_streak_for(tracker.habits[habit_id])}")
     else:
         for hid, st in longest_streak_all(tracker.list_habits()).items():
